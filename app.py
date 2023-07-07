@@ -1,18 +1,20 @@
-from flask import Flask,request, url_for, redirect, render_template
+from flask import Flask, render_template, request
 import pickle
 import numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder= "./")
 
-model=pickle.load(open('model.pkl','rb'))
+model=pickle.load(open('./model.pkl','rb'))
+
+
 
 
 @app.route('/')
 def hello_world():
-    return render_template("forest_fire.html")
+    return render_template('forest_fire.html')
 
 
-@app.route('/predict',methods=['POST','GET'])
+@app.route('/predict',methods=['GET','POST'])
 def predict():
     int_features=[int(x) for x in request.form.values()]
     final=[np.array(int_features)]
@@ -28,4 +30,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
